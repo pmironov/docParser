@@ -13,6 +13,7 @@ namespace WordToExcel
         internal string DocNumber { get; set; }
         internal string DocText { get; set; }
         internal string DocDate { get; set; }
+        internal string ActNumber { get; set; }
 
         internal string FIO { get; set; }
         internal List<string> People { get { if (fPeople == null) return new List<string>(); else return fPeople; } set { fPeople = value; } }

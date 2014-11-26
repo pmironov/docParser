@@ -12,5 +12,7 @@ namespace WordToExcel
         internal const string type2 = "найма служебного жилого помещения";
         internal const string type3 = "найма жилого помещения маневренного фонда";
         internal const string type4 = "найма жилого помещения в общежитии";
+
+        internal const string type5 = "к договору социального найма";
     }
 }

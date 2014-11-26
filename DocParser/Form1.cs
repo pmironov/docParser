@@ -24,7 +24,8 @@ namespace WordToExcel
 
         void ParseFiles()
         {
-            var dir = "D:\\docs\\v8\\output";
+            List<string> errorFiles = new List<string>();
+            var dir = "D:\\DocsToParse\\Output";
             var allDirs = Directory.GetFileSystemEntries(dir);
             var outputDir = dir;//Path.Combine(dir, "Output");
             //if (!Directory.Exists(outputDir))                        // common processing
@@ -37,7 +38,11 @@ namespace WordToExcel
                     continue;
 
                 Logger.LogI(string.Format("--- Processing directory: {0} ---", entry));
-                
+
+
+                if (CheckFile(entry))
+                    errorFiles.Add(entry);
+
                 //var filesInDirList = Directory.GetFiles(entry).ToList();
                 //filesInDirList.RemoveAll(f => Path.GetFileName(f).StartsWith("~$"));       // common processing
                 //filesInDirList = ProcessFilesOrder(filesInDirList);
@@ -53,12 +58,25 @@ namespace WordToExcel
 
                 //MergeFiles(filesInDirList, entry, outputName); // common processing
                 
-                ConvertFile(entry, outputName); // create xml only
-
+                //ConvertFile(entry, outputName); // create xml only
+                
                 currentCount++; 
                 UpdateProgressBar();
             }
             EnableButton();
+        }
+
+        private bool CheckFile(string entry)
+        {
+            bool res = false;
+
+            string fileText = ReadFileText(entry);
+
+            string docNumFromLoan = string.Empty;
+            string docNumFromAct = string.Empty;
+            string docNumFromRest = string.Empty;
+
+            return res;
         }
 
         private void EnableButton()
@@ -208,6 +226,19 @@ namespace WordToExcel
                     var docNum = fileText.Substring(0, gIngex);
                     result.DocNumber = docNum.Replace("\r", string.Empty).Replace("\n", string.Empty).Trim();
                 }
+
+                type = Constants.type5;
+                index = fileText.IndexOf(type) > -1 ? fileText.IndexOf(type) + type.Length + 1 : -1;
+                if (index == -1)
+                    result.ActNumber = "XX";
+                else
+                {
+                    fileText = fileText.Substring(index);
+                    var gIngex = fileText.IndexOf("от");
+                    var docNum = fileText.Substring(0, gIngex);
+                    result.ActNumber = docNum.Replace("\r", string.Empty).Replace("\n", string.Empty).Trim();
+                }
+
                 return result;
             }
             catch (Exception ex)
